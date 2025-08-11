@@ -1,0 +1,38 @@
+apiVersion: v1
+entries:
+  cluster-octopus:
+  - annotations:
+      artifacthub.io/changes: |
+        - Initial release of Cluster Octopus Helm chart
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: cluster-octopus
+          image: cgtysylr/cluster-octopus:1.0.0
+      artifacthub.io/operator: "false"
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-08-10T16:11:53.575529+03:00"
+    description: Cluster Octopus controls all necessary access to ensure your Kubernetes
+      Cluster is functioning correctly.
+    digest: 55ede70f043e00ee7a405593e297102b87e9a84d3000e7308f46beca27eaa398
+    home: https://github.com/cgtysylr/cluster-octopus.git
+    keywords:
+    - kubernetes
+    - cluster
+    - monitoring
+    - network
+    - devops
+    - octopus
+    - laravel
+    - php
+    maintainers:
+    - email: cgtysylr@github.com
+      name: cgtysylr
+    name: cluster-octopus
+    sources:
+    - https://github.com/cgtysylr/cluster-octopus.git
+    type: application
+    urls:
+    - charts/cluster-octopus-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-08-10T16:11:53.574999+03:00"

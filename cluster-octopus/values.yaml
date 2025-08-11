@@ -1,0 +1,161 @@
+# Default values for cluster-octopus.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  # Global image registry override
+  imageRegistry: ""
+  # Global image pull secrets
+  imagePullSecrets: []
+
+# Image configuration
+image:
+  repository: cgtysylr/cluster-octopus
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+# Name override
+nameOverride: ""
+fullnameOverride: ""
+
+# Namespace configuration
+namespace:
+  create: true
+  name: cluster-octopus
+
+# ServiceAccount configuration
+serviceAccount:
+  create: true
+  name: ""
+  automount: true
+  annotations: {}
+
+# Pod configuration
+podAnnotations: {}
+podLabels: {}
+
+# Security context
+podSecurityContext:
+  runAsUser: 0
+  fsGroup: 0
+
+securityContext:
+  runAsUser: 0
+  allowPrivilegeEscalation: true
+  capabilities:
+    add:
+      - SYS_ADMIN
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: cluster-octopus.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Resources configuration
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Storage configuration
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteMany
+  size: 10Gi
+  mountPath: /nfsdata/data
+  subPath: cluster-octopus
+
+# Database configuration
+database:
+  connection: pgsql
+  host: 10.15.50.36
+  port: 5432
+  database: OutagesManagement
+  username: OutagesManagementUser
+  password: EO5r7MlfIA8UdegH
+
+# Application configuration
+app:
+  name: "Cluster Octopus"
+  env: "production"
+  debug: "false"
+  locale: "en"
+  timezone: "UTC"
+  key: "base64:nFTljIbPWjsl/s2KPtIuztxaZ9mlXcphWgOt5M2LNtQ="
+
+# RBAC configuration
+rbac:
+  create: true
+  clusterRole:
+    create: true
+    name: ""
+  clusterRoleBinding:
+    create: true
+    name: ""
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Exists"
+    effect: "NoExecute"
+
+# Affinity
+affinity: {}
+
+# Additional environment variables
+extraEnvVars: []
+# - name: EXTRA_VAR
+#   value: "extra_value"
+
+# Additional volume mounts
+extraVolumeMounts: []
+# - name: extra-volume
+#   mountPath: /extra/path
+#   readOnly: true
+
+# Additional volumes
+extraVolumes: []
+# - name: extra-volume
+#   secret:
+#     secretName: extra-secret

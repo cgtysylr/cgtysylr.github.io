@@ -1,0 +1,63 @@
+apiVersion: v2
+name: cluster-octopus
+description: Cluster Octopus controls all necessary access to ensure your Kubernetes Cluster is functioning correctly.
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 1.0.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.0.0"
+
+# Homepage URL
+home: https://github.com/cgtysylr/cluster-octopus.git
+
+# Source code repository
+sources:
+  - https://github.com/cgtysylr/cluster-octopus.git
+
+# Keywords for ArtifactHub
+keywords:
+  - kubernetes
+  - cluster
+  - monitoring
+  - network
+  - devops
+  - octopus
+  - laravel
+  - php
+
+# Maintainers information
+maintainers:
+  - name: cgtysylr
+    email: cgtysylr@github.com
+
+# License
+license: MIT
+
+# Icon (will be added later)
+# icon: https://raw.githubusercontent.com/cgtysylr/cluster-octopus/main/icon.png
+
+# Annotations for ArtifactHub
+annotations:
+  artifacthub.io/changes: |
+    - Initial release of Cluster Octopus Helm chart
+  artifacthub.io/images: |
+    - name: cluster-octopus
+      image: cgtysylr/cluster-octopus:1.0.0
+  artifacthub.io/operator: "false"
+  artifacthub.io/containsSecurityUpdates: "false"

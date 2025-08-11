@@ -1,0 +1,87 @@
+name: Helm Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'cluster-octopus/**'
+      - '.github/workflows/helm-release.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'cluster-octopus/**'
+      - '.github/workflows/helm-release.yml'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+
+      - name: Lint Chart
+        run: |
+          helm lint cluster-octopus/
+          helm template test-release cluster-octopus/ --dry-run
+
+      - name: Package Chart
+        run: |
+          helm package cluster-octopus/
+          mkdir -p docs/charts
+          mv cluster-octopus-*.tgz docs/charts/
+
+      - name: Update Repository Index
+        run: |
+          helm repo index docs/
+
+      - name: Validate Repository
+        run: |
+          if [ ! -f "docs/index.yaml" ]; then
+            echo "❌ index.yaml not found"
+            exit 1
+          fi
+          if [ ! -d "docs/charts" ]; then
+            echo "❌ charts directory not found"
+            exit 1
+          fi
+          chart_count=$(ls docs/charts/*.tgz 2>/dev/null | wc -l)
+          if [ "$chart_count" -eq 0 ]; then
+            echo "❌ No chart packages found"
+            exit 1
+          fi
+          echo "✅ Repository validation passed"
+          echo "📊 Found $chart_count chart package(s)"
+
+  deploy:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+
+      - name: Package and Index Charts
+        run: |
+          helm package cluster-octopus/
+          mkdir -p docs/charts
+          mv cluster-octopus-*.tgz docs/charts/
+          helm repo index docs/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          force_orphan: true
